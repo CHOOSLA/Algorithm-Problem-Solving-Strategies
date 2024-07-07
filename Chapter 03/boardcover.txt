@@ -25,8 +25,78 @@
 
 // 모든 칸에 블럭을 채웠을 경우 return --> 기저사례
 // 블럭은 왼쪽 위 부터 검사함
-// 모든 칸에 블럭을 채우는 경우를 뭐라고 해야할까?
-// 그냥 덮어 씌우는 거 고려 안하고 일단 모든 경우의 수의 블럭을 채워 본다음
-// 다 덮여 있으면 카운트 하고 아니면 카운트 하지 않는 아이디어...
+// 모든 흰 색 칸에 일단 모든 L자를 넣는다 --> 재귀가 필요한 부분
+// 놓았던 블럭이 다른 블럭과 겹치치 않은 경우 ok 사인 
+// 모든 블럭이 차있고 마지막으로 놓았던 블럭이 ok 일 경우 맞게 넣었다고 생각하고 count
+// 다시 넣었던 블럭을 뺀다.
+
+// 최종으로 count했던 수를 새서 return
 
 
+// 아래는 위의 내용을 기반으로 코딩한 것
+
+
+// 4가지 모션을 저장한 배열 = 4
+// 3개의 칸을 차지함 = 3
+// x,y의 좌표 = 2
+int moving[4][3][2] = {
+    {{0, 0}, {1, 0}, {0, 1}},
+    {{0, 0}, {0, 1}, {1, 1}},
+    {{0, 0}, {1, 0}, {1, 1}},
+    {{0, 0}, {1, 0}, {1, -1}},
+};
+
+
+int countCover(vector<vector<int>>& board){
+    // 맨 위에서부터 흰색칸을 찾는다
+    int y=-1 , x=-1;
+    for(int i=0;i<board.size();++i){
+        for(int j=0;j<board[0].size();++j){
+            if(board[i][j] == 0){
+                y = i;
+                x = j;
+                break;
+            }
+        }
+        if(y!=-1) break;
+    }
+
+    
+    // 모든 블럭이 찼을 경우
+    if(y==-1) return 1;
+
+    // 4가지 블럭 방향을 가지고 재귀함수를 돌린다.
+    // 여기서 일단 모든 흰 블럭을 채우고 나서 이 블럭이 맞았을 경우
+    // 맞았을 때 count를 한다
+    // 즉 블럭을 넣을 수 있을 때 재귀함수를 호출하는 경우
+    int ret = 0;
+    for(int type=0;type<4;++type){
+        if(set(board,y,x,type,1)){
+            countCover(board);
+        }
+        set(board,y,x,type,-1);
+    }
+
+    return ret;
+}
+
+int set(vector<vector<int>>& board, int y, int x, int type, int delta){
+    bool ok = true;
+
+    // 여기서 경기장 밖으로 나가는 경우를 검사
+    // 블럭이 겹치는 경우 검사
+    // 블럭이 겹치는 경우는 일단 블럭을 둔 다음에 검사한다.
+    for(int i=0;i<3;++i){
+        const int ny = moving[type][i][0];
+        const int nx = moving[type][i][1];
+        
+        if(ny < 0 || ny >= board.size() || nx < 0 || nx >= board[0].size()){
+            ok = false;
+        }else if((board[ny][nx] += delta) > 1){
+            // 블럭이 겹쳐져서 놓아졌을 경우
+            ok = false;
+        }
+    }
+
+    return ok;
+}
