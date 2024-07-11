@@ -15,7 +15,7 @@ double dist[8][8]; // 두 도시 간의 거리를 저장하는 배열
 int main(int argc, char const *argv[])
 {
     int T;
-    freopen("inputs/traveling-sales-man.txt", "r", stdin);
+    // freopen("inputs/traveling-sales-man.txt", "r", stdin);
     cin >> T;
     for (int test_case = 1; test_case <= T; test_case++)
     {
@@ -32,16 +32,23 @@ int main(int argc, char const *argv[])
             }
         }
 
-                vector<int> path = {0};
-        vector<bool> visited;
-        visited.push_back(true);
-        for (int i = 1; i < n; i++)
+        double result = INFINITY;
+        for (int i = 0; i < n; i++)
         {
-            visited.push_back(false);
+            vector<int> path;
+            vector<bool> visited;
+            for (int j = 0; j < n; j++)
+            {
+                visited.push_back(false);
+            }
+            path.push_back(i);
+            visited[i] = true;
+            double currentLength = 0.0;
+            double tmp = shortestPath(path, visited, currentLength);
+            result = min(result, tmp);
         }
-
-        double currentLength = 0.0;
-        double result = shortestPath(path, visited, currentLength);
+        cout << fixed;
+        cout.precision(10);
         cout << result << endl;
     }
 
@@ -58,7 +65,7 @@ double shortestPath(vector<int> &path, vector<bool> &visited, double currentLeng
     // 모든 지점을 방문했을 경우 다시 시작 지점으로 돌아온 후 return
     if (path.size() == n)
     {
-        return currentLength + dist[path[0]][path.back()];
+        return currentLength; // + dist[path[0]][path.back()];
     }
 
     // 방문되지 않은 모든 점을 방문하며
