@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     int test_case;
     int T;
 
-    freopen("inputs/picnic.txt", "r", stdin);
+    freopen("../inputs/picnic.txt", "r", stdin);
     cin >> T;
 
     for (test_case = 1; test_case <= T; ++test_case)

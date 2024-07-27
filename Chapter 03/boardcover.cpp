@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 {
     int T;
 
-    freopen("inputs/boardcover.txt", "r", stdin);
+    freopen("../inputs/boardcover.txt", "r", stdin);
     cin >> T;
     for (int test_case = 1; test_case <= T; ++test_case)
     {
