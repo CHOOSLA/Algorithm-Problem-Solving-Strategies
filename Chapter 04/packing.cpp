@@ -80,11 +80,28 @@ int AnswerPacking(int item, int capacity)
     // 뽑았을 경우
     if (capacity >= volumes[item])
     {
-        ret = max(ret, AnswerPacking(capacity - volumes[item], item + 1) + needs[item]);
+        ret = max(ret, AnswerPacking(item + 1, capacity - volumes[item]) + needs[item]);
     }
 
-    answer_choices.push_back(choice);
     return ret;
+}
+
+// 역추적하는 알고리즘
+// pack를 시켜서 둘의 값이 같다면 그것을 안뽑아도 되고
+// 다르다면 뽑아야한다.
+void reconstruct(int item, int capacity, vector<string> &picked)
+{
+    if (item == n)
+        return;
+    if (AnswerPacking(item, capacity) == AnswerPacking(item + 1, capacity))
+    {
+        reconstruct(item + 1, capacity, picked);
+    }
+    else
+    {
+        picked.push_back(things[item]);
+        reconstruct(item + 1, capacity - volumes[item], picked);
+    }
 }
 
 int main(int argc, char const *argv[])
@@ -108,12 +125,14 @@ int main(int argc, char const *argv[])
             // cout << volumes[dd] << " " << needs[dd] << endl;
         }
         cout << AnswerPacking(0, w) << " ";
-        cout << answer_choices.size() << endl;
-        for (int s : answer_choices)
+        vector<string> picked;
+        reconstruct(0, w, picked);
+        cout << picked.size() << endl;
+        for (auto &&i : picked)
         {
-            cout << s << endl;
+            cout << i << endl;
         }
-    }
+        }
 
     return 0;
 }
