@@ -12,6 +12,21 @@ vector<string> choices;
 
 // 왜 나는 헷갈리는가,,,,
 // LIS와 PACKING의 차이는 무엇인가,,,
+
+// ❌❌❌❌문제점❌❌❌❌
+// 첫 번째,
+// cache 사용도가 틀림 --> cache는 매개변수에 따른 저장이다
+// fibo(1) , fibo(2) ... fibo(n) 에 대한 cache는 cache[n] 이다.
+// fibo(i)일 때의 함수 값을 저장하기 때문에
+// 두 번째,
+// packing문제에서 해당 값을 포함하지 않는 것을 고려하지 않음
+// 모든 문제를 LIS 범위에서 생각할려고함
+// LIS는 PACKING과 뭐가 다를까?
+// LIS는 현재 인덱스를 '무조건' 포함된다고하고
+// PACKING은 넣다 말다 할까?
+// 우리는 연속된 값을 찾는게 아닌 포함했을 대와 포함하지 않았을 때를 생각하기 때문이다.
+// ❌❌❌❌❌❌❌❌❌❌❌
+
 // 절박도를 max로 하는 값
 int packing(int idx, int weight)
 {
@@ -46,6 +61,32 @@ int packing(int idx, int weight)
     return ret;
 }
 
+int answer_cache[101][1000];
+vector<int> answer_choices;
+int AnswerPacking(int item, int capacity)
+{
+    // 기저 사례
+    if (item == n)
+        return 0;
+
+    // 캐쉬확인
+    int &ret = answer_cache[item][capacity];
+    if (ret != -1)
+        return ret;
+
+    // 현재 item을 뽑지 않았을 경우
+    ret = AnswerPacking(item + 1, capacity);
+
+    // 뽑았을 경우
+    if (capacity >= volumes[item])
+    {
+        ret = max(ret, AnswerPacking(capacity - volumes[item], item + 1) + needs[item]);
+    }
+
+    answer_choices.push_back(choice);
+    return ret;
+}
+
 int main(int argc, char const *argv[])
 {
     freopen("../inputs/packing.txt", "r", stdin);
@@ -54,6 +95,8 @@ int main(int argc, char const *argv[])
     for (int cc = 0; cc < cases; cc++)
     {
         memset(cache, -1, sizeof(cache));
+        memset(answer_cache, -1, sizeof(answer_cache));
+        answer_choices.clear();
         cin >> n >> w;
         // cout << n << w << endl;
         for (int dd = 0; dd < n; dd++)
@@ -64,9 +107,9 @@ int main(int argc, char const *argv[])
             cin >> volumes[dd] >> needs[dd];
             // cout << volumes[dd] << " " << needs[dd] << endl;
         }
-        cout << packing(-1, w) << " ";
-        cout << choices.size() << endl;
-        for (string s : choices)
+        cout << AnswerPacking(0, w) << " ";
+        cout << answer_choices.size() << endl;
+        for (int s : answer_choices)
         {
             cout << s << endl;
         }
