@@ -1,5 +1,6 @@
 {
-    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.runAutomatically": true,
     "files.associations": {
         "*.cpp": "cpp",
         "vector": "cpp",
