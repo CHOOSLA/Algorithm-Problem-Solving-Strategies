@@ -44,18 +44,22 @@ SquareMatrix pow(SquareMatrix& mat, int k){
 
 int n,k,m;
 int length[50];
-int T[50][50];
+double T[50][50];
 int prefer[10];
+
+
 
 int	main(int argc, char **argv)
 {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
     freopen("../inputs/genius.txt","r",stdin);
     int cc;
     cin >> cc;
     for (int c = 0; c < cc; c++)
     {        
         cin >> n >> k >> m;
-
+        cout << n << endl;
         for (int i = 0; i < k; i++)
         {
             cin >> length[i];
@@ -74,14 +78,9 @@ int	main(int argc, char **argv)
             cin >> prefer[i];
         }
         
-        for(auto& i:prefer){
-
-        }
+        cout << T[3][3] << endl;;
         
     }
     
-
-
-    system("pause");
     return 0;
 }
