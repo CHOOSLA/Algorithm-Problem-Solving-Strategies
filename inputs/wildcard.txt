@@ -1,4 +1,4 @@
-3
+2
 he?p
 3
 help
@@ -9,6 +9,3 @@ helpp
 help
 papa
 hello
-*bb*
-1
-babbbc
